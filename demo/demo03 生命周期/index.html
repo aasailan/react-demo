@@ -17,6 +17,7 @@
 				this.incrementCount = this.incrementCount.bind(this)
 			}
 			incrementCount(){
+        // 如果要实现点击一次操作两次state，使用回调函数
 				this.setState((prevState, props) => ({
 					count: prevState.count + 1
 				}));

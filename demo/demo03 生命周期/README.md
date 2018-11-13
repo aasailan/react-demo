@@ -148,7 +148,7 @@ incrementCount(){
     this.setState({count : this.state.count + 1})
 }
 ```
-上述代码的效果是每次点击之后计数值只会加1，因为第二个setState并没有等待第一个setState执行完毕就开始执行了，因此其依赖的当前计数值完全是错的。
+上述代码的效果是每次点击之后计数值只会加1，因为第二个setState并没有等待第一个setState执行完毕就开始执行了，因此其依赖的当前计数值完全是错的。（这段解释是有问题的，并不是第二个setState没有等待第一个setState执行完毕就开始执行，这个跟setState如何做操作合并有关）
 
 我们可以使用状态计算函数来保证数据的同步性：
 ```js

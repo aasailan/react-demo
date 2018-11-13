@@ -16,6 +16,7 @@
 				this.state = {
 					count: 0
 				}
+        this.clickHandler = this.clickHandler.bind(this);
 			}
 
 			componentDidMount() {
@@ -30,7 +31,9 @@
 				// });
 				this.setState((prevState, props) => ({
 					count: prevState.count + 1
-				}));
+				}), () => {
+          console.log(this.state.count); // 2
+        });
 
 				this.setState((prevState, props) => ({
 					count: prevState.count + 1
@@ -38,10 +41,27 @@
 					console.log(this.state.count); // 2
 				});
 			}
+
+      clickHandler() {
+        // 点击一次，count实际上只会加1
+        this.setState({
+					count: this.state.count + 1
+				}, () => {
+          console.log(this.state.count);
+        });
+
+				this.setState({
+					count: this.state.count + 1
+				}, () => {
+					console.log(this.state.count);
+				});
+      }
 			
 			render () {
 				return (
-					<div></div>
+					<div>
+            <button onClick={this.clickHandler}>点击</button>
+          </div>
 				)
 			}
 		}

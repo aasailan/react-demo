@@ -4,6 +4,7 @@
 
 
 ### 父子组件之间进行消息传递
+#### 父组件向子组件传递消息可以通过props进行传递
 React是单向数据流的，父组件向子组件传递消息可以通过props进行传递：
 
 ```jsx
@@ -28,7 +29,7 @@ class Parent extends React.Component {
 
 ReactDOM.render(<Parent />, document.getElementById('react-root'));
 ```
-
+#### 父组件将回调函数传给子组件，由子组件来调用，达到子组件向父组件传递数据的目的
 子组件向父组件传递消息也是通过props，因为在JavaScript中函数是`一等公民`，函数本身既可以像其他对象一样作为prop被传递到子组件，也可以在子组件中被直接调用。因此，我们可以向子组件传递一个`callback`，子组件通过调用这个`callback`来向父组件中传递数据。
 
 ```jsx
@@ -95,7 +96,7 @@ class Parent extends React.Component {
 ReactDOM.render(<Parent />, document.getElementById('react-root'));
 ```
 
-上面这种方式耦合比较严重，父组件承担了本来与自己无关的功能。每次进行消息传递都会引发父组件不必要的生命周期，甚至影响其他子组件。如果消息传递比较频繁，会造成很大的浪费。
+**上面这种方式耦合比较严重**，父组件承担了本来与自己无关的功能。每次进行消息传递都会引发父组件不必要的生命周期，甚至影响其他子组件。如果消息传递比较频繁，会造成很大的浪费。
 
 我们可以利用观察者模式(发布-订阅模式)实现兄弟组件之间的消息传递，需要利用eventProxy模块帮助实现消息传递功能：
 

@@ -18,41 +18,75 @@
 				super(props);
 				this.handleClick = this.handleClick.bind(this);
 				this.handleParentClick = this.handleParentClick.bind(this);
+        this.handlerFocus = this.handlerFocus.bind(this);
 			}
 
+      // componentDidMount 在render函数运行完后运行，此时已经获取各个dom元素的引用
 			componentDidMount() {
 				this.button.addEventListener('click', function(e) {
 					// e.stopPropagation();
 					// e.preventDefault();
-					console.log(3);
+					console.log('button(child) click bubble');
 				});
 
+        // 如果在真实的dom事件中阻止冒泡了，事件无法传播到document，也就无法传播到react组件
+        this.button.addEventListener('click', function(e) {
+					// e.stopPropagation();
+					// e.preventDefault();
+					console.log('button(child) click captrue');
+				}, true);
+
 				this.parent.addEventListener('click', function(e) {
-					console.log(4);
-				})
+					// console.log(4);
+          console.log('parent click bubble');
+				});
+
+        this.parent.addEventListener('click', function(e) {
+					// console.log(4);
+          console.log('parent click captrue');
+				}, true);
+
+        this.input.addEventListener('focus', function(e) {
+          console.log('input focus');
+        });
+
+        this.input.addEventListener('blur', function(e) {
+          console.log('input blur');
+        });
 			}
+
+      handlerBlur() {
+        console.log('input(react dom) blur');
+      }
 			
+      handlerFocus(e) {
+        console.log('input(react dom) focus');
+      }
 
 			handleClick(e) {
-				console.log(1);
-				e.stopPropagation();
+				console.log('button(react dom) click');
+				// e.stopPropagation();
 				// e.nativeEvent.stopPropagation();
 				// e.preventDefault();
 			}
 
 			handleParentClick(e) {
-				console.log(2);
+				// console.log(2);
+        console.log('parent(react dom) click');
 			}
 
 			render() {
 				return (
 					<div onClick={this.handleParentClick}
+            // 回调式ref，也可以获得dom元素引用
 						ref={(parent) => {this.parent = parent}}
 						style={{width: 300, height: 300, background: "red", textAlign: "center"}} 
 						>
 						<button onClick={this.handleClick}
 							style={{width: 80, height: 30, background: "green"}} 
 							ref={(button) => {this.button = button}}>点我</button>
+            <input onFocus={this.handlerFocus} ref={(input) => {this.input = input}} placeholder="测试focus事件"
+              onBlur={this.handlerBlur}/>
 					</div>
 				)
 			}
@@ -170,7 +204,8 @@
 			}
 		}
 		
-		ReactDOM.render(<EventPooling />, document.getElementById('react-root'));
+		// ReactDOM.render(<EventPooling />, document.getElementById('react-root'));
+    ReactDOM.render(<EventTest />, document.getElementById('react-root'));
 	</script>
 </body>
 </html>
