@@ -18,7 +18,8 @@
   "homepage": "https://github.com/Marco2333/react-demo#readme",
   "dependencies": {
     "jquery": "^3.2.1",
-    "react": "^15.5.4",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "reactify": "^1.1.1"
   },
   "devDependencies": {

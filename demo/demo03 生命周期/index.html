@@ -6,30 +6,120 @@
 </head>
 <body>
 	<div id="react-root"></div>
-	<script src="../build/react.js"></script>
-	<script src="../build/react-dom.js"></script>
+	<script src="../build/react.v16.6.3.js"></script>
+	<script src="../build/react-dom.v16.6.3.js"></script>
 	<script src="../build/browser.min.js"></script>
-	<script type="text/babel">
-		class Counter extends React.Component{
+  <script type="text/babel">
+  
+    function logLife(className, lifeName, prop = null, state = null) {
+      console.log(`/***************${className} ${lifeName}***************/`);
+      prop && console.log(`prop: ${JSON.stringify(prop)}`);
+      state && console.log(`state: ${JSON.stringify(state)}`);
+      console.log('/******************** end ***********************/');
+    }
+
+    class BaseComponent extends React.Component {
+
+      constructor(props) {
+        super(props);
+      }
+
+      componentWillMount() {
+        logLife(this.name, 'componentWillMount');
+      }
+
+      componentDidMount() {
+        logLife(this.name, 'componentDidMount');
+      }
+
+      componentWillReceiveProps(nextProp) {
+        logLife(this.name, 'componentWillReceiveProps', nextProp);
+      }
+
+      shouldComponentUpdate(nextProp, nextState) {
+        logLife(this.name, 'shouldComponentUpdate', nextProp, nextState);
+        return true;
+      }
+
+      componentWillUpdate(nextProp, nextState) {
+        logLife(this.name, 'componentWillUpdate', nextProp, nextState);
+      }
+
+      getSnapshotBeforeUpdate(preProp, prevState) {
+        logLife(this.name, 'getSnapshotBeforeUpdate', preProp, prevState);
+        return {
+          snapshot: 'snapshot'
+        }
+      }
+
+      componentDidUpdate(preProp, preState, snapshot) {
+        logLife(this.name, 'componentDidUpdate', preProp, preState);
+        console.log(snapshot);
+      }
+
+    }
+
+    class ShowCount extends BaseComponent {
+
+      static getDerivedStateFromProps(nextProp, preState) {
+        logLife('ShowCount', 'getDerivedStateFromProps', nextProp, preState);
+        return {
+          derivedState: 'fromProp'
+        };
+      }
+
+      constructor(props) {
+        super(props);
+        this.name = 'ShowCount';
+        logLife(this.name, 'constructor', props);
+      }
+
+      render() {
+        logLife(this.name, 'render', this.prop, this.state);
+        return (
+          <div>{this.props.count}</div>
+        )
+      }
+    }
+
+		class Counter extends BaseComponent {
+
+      static getDerivedStateFromProps(nextProp, preState) {
+        logLife('Counter', 'getDerivedStateFromProps', nextProp, preState);
+        return {
+          derivedState: 'fromProp'
+        };
+      }
+
 			constructor(props){
-				super(props);
+        // console.log('Counter constructor');
+        super(props);
+        this.name = 'Counter';
 				this.state = {count : 0} 
-				this.incrementCount = this.incrementCount.bind(this)
-			}
+        this.incrementCount = this.incrementCount.bind(this)
+        logLife(this.name, 'constructor', props);
+      }
+
 			incrementCount(){
         // 如果要实现点击一次操作两次state，使用回调函数
-				this.setState((prevState, props) => ({
-					count: prevState.count + 1
-				}));
-				this.setState((prevState, props) => ({
-					count: prevState.count + 1
-				}));
+				this.setState((prevState, props) => {
+          console.log('after increment');
+          return {
+					  count: prevState.count + 1
+          };
+        });
+				// this.setState((prevState, props) => ({
+				// 	count: prevState.count + 1
+				// }));
 			}
 			render(){
-				return <div>
-							<button onClick={this.incrementCount}>Increment</button>
-							{this.state.count}
-						</div>
+        logLife(this.name, 'render', this.prop, this.state);
+				return (
+          <div>
+            <button onClick={this.incrementCount}>Increment</button>
+            <ShowCount count={this.state.count} />
+          </div>
+        );
 			}
 		}
 

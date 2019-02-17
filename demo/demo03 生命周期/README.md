@@ -5,24 +5,27 @@
 - 卸载(Unmounting): 这个阶段发生在组件从DOM中被删除时
 
 ## 组件挂载阶段
-ES5(React.createClass)
+ES5(React.createClass) （不重要）
 - `getInitialState()`
 - `componentWillMount()`
 - `render()`
 - `componentDidMount()`
 
 ES6(React.Component)
-- `constructor()`
-- `componentWillMount()`
+- `constructor(props)`
+- `static getDerivedStateFromProps(nextProp, preState): state`
+- `componentWillMount() / UNSAFE_componentWillMount()`
 - `render()`
 - `componentDidMount()`
 
 ## 组件更新阶段
-- `componentWillReceiveProps()`
-- `shouldComponentUpdate()`
-- `componentWillUpdate()`
+- `componentWillReceiveProps(nextProps) / UNSAFE_componentWillReceiveProps(nextProps)`
+- `static getDerivedStateFromProps(nextProp, preState): state`
+- `shouldComponentUpdate(nextProp, nextState): boolean`
+- `componentWillUpdate(nextProp, nextState) / UNSAFE_componentWillUpdate(nextProp, nextState)`
 - `render()`
-- `componentDidUpdate()`
+- `getSnapshotBeforeUpdate(preProp, preState): snapshot`
+- `componentDidUpdate(preProp, preState, snapshot)`
 
 ## 组件卸载阶段
 - `componentWillUnmount()`
@@ -42,9 +45,24 @@ constructor(props)
 ```js
 constructor(props) {
     super(props);
-        this.state = {
+    this.state = {
         color: props.initialColor
     };
+}
+```
+
+### getDerivedStateFromProps()
+```js
+getDerivedStateFromProps()
+```
+组件实例化后和接受新属性时将会调用getDerivedStateFromProps。它应该返回一个对象来更新状态，或者返回null来表明新属性不需要更新任何状态。
+
+注意，如果父组件导致了组件的重新渲染，即使属性没有更新，这一方法也会被调用。如果你只想处理变化，你可能想去比较新旧值。
+
+在 16.4.0版本后 调用this.setState() 也会触发 getDerivedStateFromProps()。
+```js
+static getDerivedStateFromProps(nextProps, prevState) {
+  return null;
 }
 ```
 

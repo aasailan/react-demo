@@ -1,7 +1,7 @@
 # React高阶组件
-
 高阶组件(Higher Order Component，HOC)是React的一种模式，用于增强现有组件的功能。
 简单来说，一个高阶组件就是一个函数，这个函数接受一个组件作为输入，并返回一个新组件作为输出。返回的新组件拥有输入组件不具有的功能。
+从设计模式上来看，HOC属于装饰器模式（在不改变原有对象的基础上，添加新的功能）
 
 #### 高阶组件的意义：
 - 重用代码。利用高阶组件提取公共逻辑，减少重复代码。
@@ -15,17 +15,12 @@
 特点：返回的新组件类直接继承自`React.Component`。新组件扮演的角色是参数组件的`代理`。
 
 ```jsx
-function removeUserProp(WrappedComponent) {
-	return class NewComponent extends WrappedComponent {
-		render() {
-			const elements = super.render();
-			const {user, ...otherProps} = this.props;
-
-			console.log('##', elements);
-
-			return React.cloneElement(elements, otherProps, elements.props.children);
-		}
-	};
+function HOC(WrappedComponent) {
+  return class NewComponent extends React.Component {
+    render() {
+      return <WrappedComponent/>
+    }
+  }
 }
 ```
 
@@ -86,7 +81,7 @@ const refsHOC = (WrappedComponent) => {
 
 #### 抽取状态
 在`react-redux`中的`connect`函数就是用到了高阶组件的抽取状态功能。注意，`connect`函数本身并不是高阶组件，其执行结果才是高阶组件。
-在傻瓜组件与容器组件的关系中，通常将傻瓜组件作为无状态组件，而由容器组件来管理所有状态，这个模式就是`抽取状态`。
+在傻瓜组件与容器组件的关系中，通常将傻瓜组件作为无状态组件，而由容器组件来管理所有状态，这个模式就是`抽取状态`。（珂理化）
 
 `connect`代码结构如下：
 ```jsx
@@ -360,9 +355,11 @@ HOCComponent.displayName = `Connect(${getDisplayName(WrappedComponent)})`;
 
 
 ### 以函数为子组件
-高阶组件可以实现代码重用，在不损害原组件的情况下修改组件的功能。但是，高阶组件也有局限性。它固化了对参数组件的要求。如果一个高阶组件要作用于某个组件，那么这个组件就必须能够接受高阶组件传过来的`props`，如果组件不支持高阶组件传过来的props，或者props的命名方式或使用方式不同，那么就没办法应用高阶组件作用于此组件。
+**高阶组件的固有缺点：**高阶组件可以实现代码重用，在不损害原组件的情况下修改组件的功能。但是，高阶组件也有局限性。它**固化了对参数组件的要求**。如果一个高阶组件要作用于某个组件，那么这个组件就必须能够接受高阶组件传过来的`props`，如果组件不支持高阶组件传过来的props，或者props的命名方式或使用方式不同，那么就没办法应用高阶组件作用于此组件。
 
 “以函数为子组件”的模式就是为了克服这种局限性而产生的。这种模式下，实现代码重用的是一个真正的React组件，而不是一个函数，并且该组件要求子组件必须为一个函数。该组件的`render`函数会直接把`this.props.children`当做函数来调用。
+
+注意：以函数为子组件并不是高阶组件的一种模式，它是为了克服高阶组件**固化了对参数组件的要求**这个缺点而出现的模式。
 
 ```jsx
 const loggedInUser = 'mock user';

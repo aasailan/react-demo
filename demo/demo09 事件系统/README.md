@@ -343,7 +343,7 @@ string type
 > As of v0.14, returning false from an event handler will no longer stop event propagation. Instead, e.stopPropagation() or e.preventDefault() should be triggered manually, as appropriate.
 
 ### Event Pooling
-React使用对象池来管理合成事件对象的创建和销毁，这样`SyntheticEvent`可以被重用。当回调函数被调用之后，`SyntheticEvent`的属性会被置为`null`，所以不能以同步的方式来获取`event`。
+React使用对象池来管理合成事件对象的创建和销毁，这样`SyntheticEvent`可以被重用。当回调函数被调用之后，`SyntheticEvent`的属性会被置为`null`，所以不能以异步的方式来获取`event`。
 
 ```jsx
 function onClick(event) {
@@ -406,7 +406,7 @@ class EventPooling extends React.Component {
 
 
 ### 支持的事件
-React标准化了事件对象，使之拥有一致的接口。事件处理函数会在冒泡阶段被依次调用。如果想在捕获阶段触发事件处理函数，需要为事件函数添加`Capture`前缀。譬如：`onClick` => `onCaptureClick`。
+React标准化了事件对象，使之拥有一致的接口。事件处理函数会在冒泡阶段被依次调用。如果想在捕获阶段触发事件处理函数，需要为事件函数添加`Capture`后缀。譬如：`onClick` => `onClickCapture`。
 
 #### Clipboard Events
 ```jsx

@@ -65,24 +65,40 @@
 
 			handleClick(e) {
 				console.log('button(react dom) click');
+        // 调用event的persist方法，将其从对象池中移除，调用这个方法后，event对象可以在回调函数中被异步引用。
+        // e.persist();
+        setTimeout(() => {
+          // 尝试异步引用event对象，可能会输出null与警告
+          console.log(e.type);
+        });
 				// e.stopPropagation();
 				// e.nativeEvent.stopPropagation();
 				// e.preventDefault();
 			}
+
+      handleClickCapture(e) {
+        console.log('button(react dom) capture click');
+        // e.stopPropagation();
+      }
 
 			handleParentClick(e) {
 				// console.log(2);
         console.log('parent(react dom) click');
 			}
 
+      handleParentClickCapture(e) {
+        console.log('parent(react dom) capture click');
+        // e.stopPropagation();
+      }
+
 			render() {
 				return (
-					<div onClick={this.handleParentClick}
+					<div onClick={this.handleParentClick} onClickCapture={this.handleParentClickCapture}
             // 回调式ref，也可以获得dom元素引用
 						ref={(parent) => {this.parent = parent}}
 						style={{width: 300, height: 300, background: "red", textAlign: "center"}} 
 						>
-						<button onClick={this.handleClick}
+						<button onClick={this.handleClick} onClickCapture={this.handleClickCapture}
 							style={{width: 80, height: 30, background: "green"}} 
 							ref={(button) => {this.button = button}}>点我</button>
             <input onFocus={this.handlerFocus} ref={(input) => {this.input = input}} placeholder="测试focus事件"
