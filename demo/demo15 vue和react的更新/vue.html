@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue组件更新示例</title>
+</head>
+<body>
+	<div id="app">
+    <parent></parent>
+  </div>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+    Vue.component('parent', {
+      data: function () {
+        return {
+          count: 0
+        }
+      },
+      methods: {
+        addCount() {
+          this.count++;
+        }
+      },
+      template: `<div>
+          <div>count:{{ count }}</div>
+          <button @click="addCount">点击更新</button>
+          <child></child>
+      </div>`,
+    });
+    Vue.component('child', {
+      render(createElement) {
+        console.log('子组件更新');
+        return createElement('div', '这里是子组件');
+      }
+    });
+    new Vue({ el: '#app' })
+  </script>
+</body>
+</html>

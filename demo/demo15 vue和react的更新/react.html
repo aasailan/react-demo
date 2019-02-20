@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>react组件更新示例</title>
+</head>
+<body>
+	<div id="react-root"></div>
+	<script src="../build/react.js"></script>
+  <script src="../build/react-dom.js"></script>
+  <script src="../build/browser.min.js"></script>
+  <script type="text/babel">
+    class Parent extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          count: 0
+        };
+        this.addCount = this.addCount.bind(this);
+      }
+
+      addCount() {
+        this.setState({
+          count: this.state.count + 1
+        })
+      }
+
+      render() {
+        return (
+          <div>
+            <div>count：{this.state.count}</div>
+            <button onClick={this.addCount}>点击更新</button>
+            <Child/>  
+          </div>
+        );
+      }
+    }
+
+    // 为什么react没有组件注册这种说法？
+    function Child(props) {
+      console.log('子组件更新');
+      return <div>这里是子组件</div>
+    }
+
+    ReactDOM.render(<Parent/>, document.getElementById('react-root'));
+  </script>
+</body>
+</html>
